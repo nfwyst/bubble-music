@@ -25,18 +25,19 @@ window.addEventListener("load", () => {
         const player = sound.querySelector('audio');
         const key = player.getAttribute('data-keymatch');
         if (key !== e.key) return false;
+        sound.style.filter = 'brightness(50%)';
         player.currentTime = 0;
         player.play();
-        createBubble(colors[index], bubbles);
+        createBubble(colors[index], bubbles, () => sound.style.filter = '');
       })
     }
   }
 
-  const createBubble = (color, bubbles) => {
+  const createBubble = (color, bubbles, callback = _ => { }) => {
     const bubble = document.createElement("div");
     bubble.style.backgroundColor = color;
     bubble.style.animation = 'bubbles 1s ease';
-    bubble.onanimationend = () => bubbles.removeChild(bubble);
+    bubble.addEventListener('animationend', () => bubbles.removeChild(bubble) && callback())
     bubbles.appendChild(bubble);
   }
 
